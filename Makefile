@@ -18,10 +18,12 @@ gen: clean install download
 	shp2geobuf tl_2017_us_state.shp > us-states.pbf
 	shp2geobuf combined-shapefile-with-oceans.shp > timezones.pbf
 	geobuf2json timezones.pbf > timezones-allprops.json
+	geobuf2json us-states.pbf > us-states-allprops.json
 	namegeojson timezones-allprops.json timezones.json tzid
-	geobuf2json us-states.pbf > us-states.json
+	namegeojson us-states-allprops.json us-states.json STATEFP
 	filtergeojson timezones.json timezones-filtered.json "America/New_York" "America/Chicago" "America/Denver" "America/Los_Angeles" "America/Anchorage" "America/Adak" "Pacific/Honolulu"
-	combinegeojson us-states-timezones.json us-states.json timezones-filtered.json
+	filtergeojson us-states.json us-states-filtered.json "34" "42" "18"
+	combinegeojson us-states-timezones.json us-states-filtered.json timezones-filtered.json
 	geojson2locpb us-states-timezones.json
 	reducelocpb us-states-timezones.pb
 	compresslocpb us-states-timezones.reduce.pb
